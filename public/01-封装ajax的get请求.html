@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>封装ajax的get请求</h1>
+</body>
+<script>
+    // 封装 get 请求  /get?name=张三&age=18
+    function ajaxget(path, option, callback) {
+        let parmas = ''
+        if (option) {
+            for (var key in option) {
+                parmas += `${key}=${option[key]}&`
+            }
+            // 结束的部分去掉 &
+            parmas = parmas.substr(0, parmas.length - 1);
+            // 将参数追加到路径中
+            path += "?" + parmas
+        }
+        //1.0 创建异步对象
+        let xhr = new XMLHttpRequest()
+        //2.0 开启连接
+        xhr.open('get', path)
+        //3.0 发送请求
+        xhr.send()
+        //4.0 处理响应
+        xhr.onload = function () {
+            var result = xhr.responseText
+            callback(result)
+        }
+    }
+    // // 发送请求
+    // ajaxget('/get', result => {
+    //     // 转为对象
+    //     let obj = JSON.parse(result)
+    //     if (obj.status == 200) {
+    //         alert(obj.msg)
+    //     }
+    // })
+    // ajaxget('/getData', result => {
+    //     var obj = JSON.parse(result)
+    //     if (obj.status == 200) {
+    //         console.log(obj.data)
+    //     }
+    // })
+    let obj = {
+        name: '小追命',
+        age: 18
+    }
+    ajaxget('/get', obj, result => {
+        console.log(result)
+    })
+
+</script>
+
+</html>

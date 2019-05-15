@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>封装ajax方法（既可以处理 get 方法，又可以处理 Post 方法）</h1>
+
+</body>
+<script>
+    function ajax(methods, path, option, callback) {
+        let params = ''
+        // 设置参数
+        if (option) {
+            for (var key in option) {
+                params += `${key}=${option[key]}&`
+            }
+            params = params.substr(0, params.length - 1)
+        }
+        // 将请求方式转为大写
+        methods = methods.toUpperCase()
+        // 1.0 创建异步对象
+        let xhr = new XMLHttpRequest()
+        // 如果现在是 get 请求，应该将参数追加到 path 中
+        // 2.0 打开连接
+        if (methods === 'GET') {
+            path += '?' + params
+        }
+        xhr.open(methods, path)
+        // 3.0 设置请求头
+        if (methods === 'POST') {
+            // 4.0 发送请求
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+            xhr.send(params)
+        } else {
+            // 4.0 发送请求
+            xhr.send()
+        }
+        // 5.0 处理响应
+        xhr.onload = function () {
+            let result = xhr.responseText
+            // 将响应的数据转为对象
+            let obj = JSON.parse(result)
+            callback(obj)
+        }
+    }
+    var obj = {
+        name: '小追命',
+        age: 18
+    }
+    // ajax('get', '/get', obj, result => {
+    //     console.log(result)
+    // })
+    ajax('post', '/post', obj, result => {
+        console.log(result) 
+    })
+
+</script>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>封装ajax的post请求</h1>
+</body>
+<script>
+    // 封装 post 方法
+    // path： 请求的路径
+    // option: 请求的参数对象 { name: '张三', age: 18 }
+    // callback: 回调函数
+    function ajaxpost(path, option, callback) {
+        // 将 option 对象转为字符串： name=张三&age=18
+        let parmas = ''
+        if (option) {
+            for (var key in option) {
+                parmas += `${key}=${option[key]}&`
+            }
+            // 结束的部分去掉 &
+            parmas = parmas.substr(0, parmas.length - 1);
+        }
+
+        // 1.0 创建异步对象
+        let xhr = new XMLHttpRequest()
+        // 2.0 开启连接
+        xhr.open('POST', path)
+        // 3.0 设置请求头
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+        // 4.0 发送请求
+        xhr.send(parmas)
+        // 5.0 接收响应
+        xhr.onload = function () {
+            let result = xhr.responseText
+            // 处理自己的逻辑
+            callback(result)
+        }
+    }
+    // ajaxpost('/post', result => {
+    //     let obj = JSON.parse(result)
+    //     if (obj.status == 200) {
+    //         alert(obj.msg)
+    //     }
+    // })
+    let obj = {
+        name: '小追命',
+        age: 18
+    }
+    ajaxpost('/post', obj, result => {
+        console.log(result)
+    })
+</script>
+
+</html>
